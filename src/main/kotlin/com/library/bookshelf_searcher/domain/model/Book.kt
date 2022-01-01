@@ -9,3 +9,12 @@ data class Book (
     val bookName: String?,  // タイトル
     val authorName: String?  // 著者名
     )
+
+/**
+ * Bookレスポンスクラス.
+ */
+data class BookResponse (
+    val status: Int?,   // ステータス
+    val message: String?,  // メッセージ
+    val book: Book?  // Bookクラス
+)
