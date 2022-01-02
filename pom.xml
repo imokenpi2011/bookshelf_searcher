@@ -173,7 +173,7 @@
 							<includes>.*</includes>
 						</database>
 						<target>
-							<packageName>com.library.bookshelf_searcher.repository.db</packageName>
+							<packageName>com.library.bookshelf_searcher.domain.repository.db</packageName>
 							<directory>target/generated-sources/jooq/db</directory>
 						</target>
 					</generator>
