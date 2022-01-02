@@ -2,13 +2,14 @@ package com.library.bookshelf_searcher.app.controller
 
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-@RequestMapping("/")
 class BookshelfController {
-    @GetMapping
-    fun getTopPage() :String {
+
+    // 検索画面
+    @GetMapping("book/search")
+    fun getTopPage(): String {
         return "bookshelf/index"
     }
+
 }
