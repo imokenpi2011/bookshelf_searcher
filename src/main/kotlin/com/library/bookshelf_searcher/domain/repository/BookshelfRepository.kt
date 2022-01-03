@@ -17,7 +17,7 @@ class BookshelfRepository(private val dsl: DSLContext) {
     /**
      * 全件取得する.
      *
-     * ＠return books 書籍情報の配列
+     * ＠return List<ToBookshelf> 書籍情報の配列
      * */
     fun findAll(): List<ToBookshelf> = dsl.selectFrom(BOOKSHELF)
         .fetchInto(ToBookshelf::class.java)
@@ -26,13 +26,24 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * IDに応じた書籍を取得する.
      *
      * @args uuid UUID
-     * @return book 書籍情報
+     * @return ToBookshelf 書籍情報
      */
     fun findByUuid(uuid: String): ToBookshelf = dsl.selectFrom(BOOKSHELF)
         .where(BOOKSHELF.UUID.eq(uuid))
         .limit(1)
         .fetchInto(ToBookshelf::class.java)
         .first()
+
+    /**
+     * 著者名に応じた書籍を取得する.
+     *
+     * @args authorName 著者名
+     * @return List<ToBookshelf> 書籍情報の配列
+     */
+    fun findByAuthor(authorName: String): List<ToBookshelf> = dsl.selectFrom(BOOKSHELF)
+        .where(BOOKSHELF.AUTHOR_NAME.eq(authorName))
+        .and(BOOKSHELF.DELETE_STATUS.eq(0))
+        .fetchInto(ToBookshelf::class.java)
 
     /**
      * 書籍情報を新規作成する.
