@@ -6,6 +6,11 @@ import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
+/** 削除ステータス:未削除. */
+const val NOT_DELETED = 0
+
+/** 削除ステータス:未削除. */
+const val DELETED = 1
 
 /**
  * Bookshelfリポジトリクラス.
@@ -20,6 +25,7 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * ＠return List<ToBookshelf> 書籍情報の配列
      * */
     fun findAll(): List<ToBookshelf> = dsl.selectFrom(BOOKSHELF)
+        .where(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
         .fetchInto(ToBookshelf::class.java)
 
     /**
@@ -30,6 +36,7 @@ class BookshelfRepository(private val dsl: DSLContext) {
      */
     fun findByUuid(uuid: String): ToBookshelf = dsl.selectFrom(BOOKSHELF)
         .where(BOOKSHELF.UUID.eq(uuid))
+        .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
         .limit(1)
         .fetchInto(ToBookshelf::class.java)
         .first()
@@ -42,7 +49,7 @@ class BookshelfRepository(private val dsl: DSLContext) {
      */
     fun findByAuthor(authorName: String): List<ToBookshelf> = dsl.selectFrom(BOOKSHELF)
         .where(BOOKSHELF.AUTHOR_NAME.eq(authorName))
-        .and(BOOKSHELF.DELETE_STATUS.eq(0))
+        .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
         .fetchInto(ToBookshelf::class.java)
 
     /**
