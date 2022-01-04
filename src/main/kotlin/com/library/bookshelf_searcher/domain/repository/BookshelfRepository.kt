@@ -77,6 +77,7 @@ class BookshelfRepository(private val dsl: DSLContext) {
         .set(BOOKSHELF.UPDATED_AT, LocalDateTime.now())
         .where(BOOKSHELF.UUID.eq(book.uuid))
         .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
+        .limit(1)
         .execute()
 
     /**
@@ -88,6 +89,7 @@ class BookshelfRepository(private val dsl: DSLContext) {
     fun deleteByUuid(uuid: String): Int = dsl.update(BOOKSHELF)
         .set(BOOKSHELF.DELETE_STATUS, DELETED)
         .where(BOOKSHELF.UUID.eq(uuid))
+        .limit(1)
         .execute()
 
     /**
