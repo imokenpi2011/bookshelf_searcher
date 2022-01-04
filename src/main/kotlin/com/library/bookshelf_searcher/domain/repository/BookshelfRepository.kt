@@ -1,11 +1,13 @@
 package com.library.bookshelf_searcher.domain.repository
 
-import com.library.bookshelf_searcher.domain.model.Book
 import com.library.bookshelf_searcher.domain.repository.db.Tables.BOOKSHELF
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
+
+/** 作成者名. */
+const val CREATE_USER = "admin"
 
 /** 更新者名. */
 const val UPDATE_USER = "admin"
@@ -60,9 +62,18 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * 書籍情報を新規作成する.
      *
      * @args book 書籍情報
-     * @return bookRes レスポンスクラス
+     * @return Int 登録件数
      */
-    fun save(book: Book) {}
+    fun save(book: ToBookshelf): Int = dsl.insertInto(BOOKSHELF)
+        .set(BOOKSHELF.UUID, book.uuid)
+        .set(BOOKSHELF.BOOK_NAME, book.bookName)
+        .set(BOOKSHELF.AUTHOR_NAME, book.authorName)
+        .set(BOOKSHELF.CREATED_AT, LocalDateTime.now())
+        .set(BOOKSHELF.UPDATED_AT, LocalDateTime.now())
+        .set(BOOKSHELF.CREATED_BY, CREATE_USER)
+        .set(BOOKSHELF.UPDATED_BY, UPDATE_USER)
+        .set(BOOKSHELF.DELETE_STATUS, NOT_DELETED)
+        .execute()
 
     /**
      * 書籍情報を更新する.
@@ -70,7 +81,7 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * @args book 書籍情報
      * @return Int 更新件数
      */
-    fun update(book: Book): Int = dsl.update(BOOKSHELF)
+    fun update(book: ToBookshelf): Int = dsl.update(BOOKSHELF)
         .set(BOOKSHELF.BOOK_NAME, book.bookName)
         .set(BOOKSHELF.AUTHOR_NAME, book.authorName)
         .set(BOOKSHELF.UPDATED_BY, UPDATE_USER)
@@ -96,7 +107,6 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * ToBookshelfクラス.
      * */
     data class ToBookshelf(
-        val id: Int,  // ID
         val uuid: String,  // UUID
         val bookName: String,  // タイトル
         val authorName: String  // 著者名

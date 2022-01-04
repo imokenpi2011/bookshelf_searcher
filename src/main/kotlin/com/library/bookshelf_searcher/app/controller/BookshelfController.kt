@@ -18,8 +18,8 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
 
     /** 検索画面. */
     @GetMapping("/book/search")
-    fun getSearchPage(model: Model): String {
-        model.addAttribute("formBook", FormBook(uuid = "", bookName = "", authorName = ""))
+    fun getSearchPage(@ModelAttribute formBook: FormBook, model: Model): String {
+        model.addAttribute("formBook", formBook)
         return "bookshelf/index"
     }
 
@@ -38,6 +38,20 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         val books: List<Book> = bookshelfService.findAll()
         model.addAttribute("books", books)
         return "bookshelf/bookList"
+    }
+
+    /** 書籍登録画面. */
+    @GetMapping("/book/new")
+    fun getBookNew(@ModelAttribute formBook: FormBook, model: Model): String {
+        model.addAttribute("formBook", formBook)
+        return "bookshelf/bookNew"
+    }
+
+    /** 書籍登録処理. */
+    @PostMapping("/book/new")
+    fun postBookNew(@ModelAttribute formBook: FormBook, model: Model): String {
+        bookshelfService.save(formBook)
+        return "redirect:/book/list"
     }
 
     /** 書籍更新画面. */
