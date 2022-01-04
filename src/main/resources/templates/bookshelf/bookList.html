@@ -12,6 +12,7 @@
     <p th:text="${book.bookName}"></p>
     <p th:text="${book.authorName}"></p>
     <a class="btn btn-link" th:href="@{'/book/update/' + ${book.uuid}}">編集</a>
+    <a class="btn btn-link" th:href="@{'/book/delete/' + ${book.uuid}}">削除</a>
 </th:block>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
