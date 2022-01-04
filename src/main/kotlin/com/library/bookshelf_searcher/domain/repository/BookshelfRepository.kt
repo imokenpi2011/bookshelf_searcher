@@ -70,7 +70,7 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * @args book 書籍情報
      * @return Int 更新件数
      */
-    fun update(book: Book): Int = dsl.update(BOOKSHELF)
+    fun update(book: ToBookshelf): Int = dsl.update(BOOKSHELF)
         .set(BOOKSHELF.BOOK_NAME, book.bookName)
         .set(BOOKSHELF.AUTHOR_NAME, book.authorName)
         .set(BOOKSHELF.UPDATED_BY, UPDATE_USER)
@@ -96,7 +96,6 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * ToBookshelfクラス.
      * */
     data class ToBookshelf(
-        val id: Int,  // ID
         val uuid: String,  // UUID
         val bookName: String,  // タイトル
         val authorName: String  // 著者名
