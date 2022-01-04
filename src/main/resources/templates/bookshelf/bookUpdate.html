@@ -7,12 +7,17 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<h1>書籍一覧</h1>
-<th:block th:each="book : ${books}">
-    <p th:text="${book.bookName}"></p>
-    <p th:text="${book.authorName}"></p>
-    <a class="btn btn-link" th:href="@{'/book/update/' + ${book.uuid}}">編集</a>
-</th:block>
+<h1>書籍更新</h1>
+<form th:action="@{/book/update}" th:method="post" th:object="${book}">
+    <div class="form-group">
+        <input class="form-control" type="text" th:field="*{bookName}"/>
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="text" th:field="*{authorName}"/>
+    </div>
+    <input type="hidden" th:field="*{uuid}">
+    <button class="btn btn-default" type="submit">検索</button>
+</form>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
