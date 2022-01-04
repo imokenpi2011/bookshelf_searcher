@@ -64,7 +64,7 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
      * 書籍情報を新規作成する.
      *
      * @args book 書籍情報
-     * @return bookRes レスポンスクラス
+     * @return Int 更新件数
      */
     fun save(book: Book) = bookshelfRepository.save(book)
 
@@ -72,7 +72,7 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
      * 書籍情報を更新する.
      *
      * @args book 書籍情報
-     * @return bookRes レスポンスクラス
+     * @return Int 更新件数
      */
     fun update(book: Book): Int {
         val bookshelf = book.let {
@@ -89,7 +89,7 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
      * 書籍情報を削除する.
      *
      * @args uuid UUID
-     * @return bookRes レスポンスクラス
+     * @return Int 更新件数
      */
     fun delete(uuid: String) = bookshelfRepository.deleteByUuid(uuid)
 }
