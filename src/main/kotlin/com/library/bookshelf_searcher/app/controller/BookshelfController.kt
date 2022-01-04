@@ -23,7 +23,7 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         return "bookshelf/index"
     }
 
-    // 検索画面
+    // 検索処理
     @PostMapping("/book/search")
     fun postSearchPage(@ModelAttribute formBook: FormBook, model: Model): String {
         val authorName: String = formBook.authorName.toString()
@@ -40,7 +40,7 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         return "bookshelf/bookList"
     }
 
-    // GET書籍更新画面
+    // 書籍更新画面
     @GetMapping("/book/update/{uuid}")
     fun getBookUpdate(@PathVariable uuid: String, model: Model): String {
         val book: Book = bookshelfService.findByUuid(uuid)
@@ -48,10 +48,18 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         return "bookshelf/bookUpdate"
     }
 
-    // 書籍更新画面
+    // 書籍更新処理
     @PostMapping("/book/update")
     fun postBookUpdate(@ModelAttribute book: Book, model: Model): String {
         bookshelfService.update(book)
         return "redirect:/book/list"
     }
+
+    // 書籍削除処理
+    @GetMapping("/book/delete/{uuid}")
+    fun getBookDelete(@PathVariable uuid: String, model: Model): String {
+        bookshelfService.delete(uuid)
+        return "redirect:/book/list"
+    }
+
 }
