@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping
 @Controller
 class BookshelfController(private val bookshelfService: BookshelfService) {
 
-    // 検索画面
+    /** 検索画面. */
     @GetMapping("/book/search")
     fun getSearchPage(model: Model): String {
         model.addAttribute("formBook", FormBook(uuid = "", bookName = "", authorName = ""))
         return "bookshelf/index"
     }
 
-    // 検索処理
+    /** 検索処理. */
     @PostMapping("/book/search")
     fun postSearchPage(@ModelAttribute formBook: FormBook, model: Model): String {
         val authorName: String = formBook.authorName.toString()
@@ -32,7 +32,7 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         return "bookshelf/index"
     }
 
-    // 書籍一覧表示画面
+    /** 書籍一覧表示画面. */
     @GetMapping("/book/list")
     fun getBookList(model: Model): String {
         val books: List<Book> = bookshelfService.findAll()
@@ -40,7 +40,7 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         return "bookshelf/bookList"
     }
 
-    // 書籍更新画面
+    /** 書籍更新画面. */
     @GetMapping("/book/update/{uuid}")
     fun getBookUpdate(@PathVariable uuid: String, model: Model): String {
         val book: Book = bookshelfService.findByUuid(uuid)
@@ -48,14 +48,14 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         return "bookshelf/bookUpdate"
     }
 
-    // 書籍更新処理
+    /** 書籍更新処理. */
     @PostMapping("/book/update")
     fun postBookUpdate(@ModelAttribute book: Book, model: Model): String {
         bookshelfService.update(book)
         return "redirect:/book/list"
     }
 
-    // 書籍削除処理
+    /** 書籍削除処理 */
     @GetMapping("/book/delete/{uuid}")
     fun getBookDelete(@PathVariable uuid: String, model: Model): String {
         bookshelfService.delete(uuid)
