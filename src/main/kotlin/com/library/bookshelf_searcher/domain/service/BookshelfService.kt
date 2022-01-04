@@ -13,9 +13,19 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
     /**
      * 全件取得する.
      *
-     * ＠return books 書籍情報の配列
+     * ＠return bookList 書籍情報の配列
      * */
-    fun findAll() = bookshelfRepository.findAll()
+    fun findAll(): List<Book> {
+        val bookList = bookshelfRepository.findAll()
+        return bookList.map {
+            Book(
+                id = it.id,
+                uuid = it.uuid,
+                bookName = it.bookName,
+                authorName = it.authorName
+            )
+        }
+    }
 
     /**
      * IDに応じた書籍を取得する.
@@ -23,7 +33,35 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
      * @args uuid UUID
      * @return book 書籍情報
      */
-    fun findByUuid(uuid: String) = bookshelfRepository.findByUuid(uuid)
+    fun findByUuid(uuid: String): Book {
+        val book = bookshelfRepository.findByUuid(uuid)
+        return book.let {
+            Book(
+                id = it.id,
+                uuid = it.uuid,
+                bookName = it.bookName,
+                authorName = it.authorName
+            )
+        }
+    }
+
+    /**
+     * 著者名に応じた書籍を取得する.
+     *
+     * @args authorName 著者名
+     * @return bookList 書籍情報の配列
+     */
+    fun findByAuthor(authorName: String): List<Book> {
+        val bookList = bookshelfRepository.findByAuthor(authorName)
+        return bookList.map {
+            Book(
+                id = it.id,
+                uuid = it.uuid,
+                bookName = it.bookName,
+                authorName = it.authorName
+            )
+        }
+    }
 
     /**
      * 書籍情報を新規作成する.

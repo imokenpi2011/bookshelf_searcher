@@ -1,30 +1,56 @@
 package com.library.bookshelf_searcher.domain.repository
 
 import com.library.bookshelf_searcher.domain.model.Book
+import com.library.bookshelf_searcher.domain.repository.db.Tables.BOOKSHELF
+import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+
+/** 削除ステータス:未削除. */
+const val NOT_DELETED = 0
+
+/** 削除ステータス:未削除. */
+const val DELETED = 1
 
 /**
  * Bookshelfリポジトリクラス.
  */
 @Repository
 @Transactional
-class BookshelfRepository {
+class BookshelfRepository(private val dsl: DSLContext) {
 
     /**
      * 全件取得する.
      *
-     * ＠return books 書籍情報の配列
+     * ＠return List<ToBookshelf> 書籍情報の配列
      * */
-    fun findAll() {}
+    fun findAll(): List<ToBookshelf> = dsl.selectFrom(BOOKSHELF)
+        .where(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
+        .fetchInto(ToBookshelf::class.java)
 
     /**
      * IDに応じた書籍を取得する.
      *
      * @args uuid UUID
-     * @return book 書籍情報
+     * @return ToBookshelf 書籍情報
      */
-    fun findByUuid(uuid: String) {}
+    fun findByUuid(uuid: String): ToBookshelf = dsl.selectFrom(BOOKSHELF)
+        .where(BOOKSHELF.UUID.eq(uuid))
+        .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
+        .limit(1)
+        .fetchInto(ToBookshelf::class.java)
+        .first()
+
+    /**
+     * 著者名に応じた書籍を取得する.
+     *
+     * @args authorName 著者名
+     * @return List<ToBookshelf> 書籍情報の配列
+     */
+    fun findByAuthor(authorName: String): List<ToBookshelf> = dsl.selectFrom(BOOKSHELF)
+        .where(BOOKSHELF.AUTHOR_NAME.eq(authorName))
+        .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
+        .fetchInto(ToBookshelf::class.java)
 
     /**
      * 書籍情報を新規作成する.
@@ -50,4 +76,13 @@ class BookshelfRepository {
      */
     fun deleteByUuid(uuid: String) {}
 
+    /**
+     * ToBookshelfクラス.
+     * */
+    data class ToBookshelf(
+        val id: Int,  // ID
+        val uuid: String,  // UUID
+        val bookName: String,  // タイトル
+        val authorName: String  // 著者名
+    )
 }
