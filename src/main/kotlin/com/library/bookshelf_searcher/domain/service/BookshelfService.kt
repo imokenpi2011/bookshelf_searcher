@@ -19,7 +19,6 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
         val bookList = bookshelfRepository.findAll()
         return bookList.map {
             Book(
-                id = it.id,
                 uuid = it.uuid,
                 bookName = it.bookName,
                 authorName = it.authorName
@@ -37,7 +36,6 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
         val book = bookshelfRepository.findByUuid(uuid)
         return book.let {
             Book(
-                id = it.id,
                 uuid = it.uuid,
                 bookName = it.bookName,
                 authorName = it.authorName
@@ -55,7 +53,6 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
         val bookList = bookshelfRepository.findByAuthor(authorName)
         return bookList.map {
             Book(
-                id = it.id,
                 uuid = it.uuid,
                 bookName = it.bookName,
                 authorName = it.authorName

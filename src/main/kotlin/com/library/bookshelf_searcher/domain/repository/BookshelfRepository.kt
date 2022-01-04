@@ -5,6 +5,10 @@ import com.library.bookshelf_searcher.domain.repository.db.Tables.BOOKSHELF
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
+
+/** 更新者名. */
+const val UPDATE_USER = "admin"
 
 /** 削除ステータス:未削除. */
 const val NOT_DELETED = 0
@@ -64,17 +68,29 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * 書籍情報を更新する.
      *
      * @args book 書籍情報
-     * @return bookRes レスポンスクラス
+     * @return Int 更新件数
      */
-    fun update(book: Book) {}
+    fun update(book: Book): Int = dsl.update(BOOKSHELF)
+        .set(BOOKSHELF.BOOK_NAME, book.bookName)
+        .set(BOOKSHELF.AUTHOR_NAME, book.authorName)
+        .set(BOOKSHELF.UPDATED_BY, UPDATE_USER)
+        .set(BOOKSHELF.UPDATED_AT, LocalDateTime.now())
+        .where(BOOKSHELF.UUID.eq(book.uuid))
+        .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
+        .limit(1)
+        .execute()
 
     /**
      * 書籍情報を削除する.
      *
      * @args uuid UUID
-     * @return bookRes レスポンスクラス
+     * @return Int 削除件数
      */
-    fun deleteByUuid(uuid: String) {}
+    fun deleteByUuid(uuid: String): Int = dsl.update(BOOKSHELF)
+        .set(BOOKSHELF.DELETE_STATUS, DELETED)
+        .where(BOOKSHELF.UUID.eq(uuid))
+        .limit(1)
+        .execute()
 
     /**
      * ToBookshelfクラス.
