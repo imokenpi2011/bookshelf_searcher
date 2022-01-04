@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 
 /**
@@ -25,7 +26,6 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
     // 検索画面
     @PostMapping("/book/search")
     fun postSearchPage(@ModelAttribute formBook: FormBook, model: Model): String {
-        println("著者名" + formBook.authorName)
         val authorName: String = formBook.authorName.toString()
         val books: List<Book> = bookshelfService.findByAuthor(authorName)
         model.addAttribute("books", books)
@@ -40,4 +40,18 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         return "bookshelf/bookList"
     }
 
+    // GET書籍更新画面
+    @GetMapping("/book/update/{uuid}")
+    fun getBookUpdate(@PathVariable uuid: String, model: Model): String {
+        val book: Book = bookshelfService.findByUuid(uuid)
+        model.addAttribute("book", book)
+        return "bookshelf/bookUpdate"
+    }
+
+    // 書籍更新画面
+    @PostMapping("/book/update")
+    fun postBookUpdate(@ModelAttribute book: Book, model: Model): String {
+        bookshelfService.update(book)
+        return "redirect:/book/list"
+    }
 }
