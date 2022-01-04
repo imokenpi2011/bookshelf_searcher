@@ -1,8 +1,10 @@
 package com.library.bookshelf_searcher.domain.service
 
 import com.library.bookshelf_searcher.domain.model.Book
+import com.library.bookshelf_searcher.domain.model.FormBook
 import com.library.bookshelf_searcher.domain.repository.BookshelfRepository
 import org.springframework.stereotype.Service
+import java.util.*
 
 /**
  * Bookshelfサービスクラス.
@@ -66,7 +68,16 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
      * @args book 書籍情報
      * @return Int 更新件数
      */
-    fun save(book: Book) = bookshelfRepository.save(book)
+    fun save(formBook: FormBook): Int {
+        val bookshelf = formBook.let {
+            BookshelfRepository.ToBookshelf(
+                uuid = UUID.randomUUID().toString(),
+                bookName = it.bookName.toString(),
+                authorName = it.authorName.toString()
+            )
+        }
+        return bookshelfRepository.save(bookshelf)
+    }
 
     /**
      * 書籍情報を更新する.
