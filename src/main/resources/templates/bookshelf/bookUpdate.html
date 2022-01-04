@@ -7,24 +7,17 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<h1>書籍検索</h1>
-<form th:action="@{/book/search}" th:method="post" th:object="${formBook}">
+<h1>書籍更新</h1>
+<form th:action="@{/book/update}" th:method="post" th:object="${book}">
+    <div class="form-group">
+        <input class="form-control" type="text" th:field="*{bookName}"/>
+    </div>
     <div class="form-group">
         <input class="form-control" type="text" th:field="*{authorName}"/>
     </div>
-    <button class="btn btn-default" type="submit">検索</button>
+    <input type="hidden" th:field="*{uuid}">
+    <button class="btn btn-default" type="submit">更新</button>
 </form>
-<div th:if="${books != null}">
-    <p>検索結果：<span th:text="${#arrays.length(books)}"></span>件</p>
-    <th:block th:each="book : ${books}">
-        <p th:text="${book.bookName}"></p>
-        <p th:text="${book.authorName}"></p>
-    </th:block>
-</div>
-
-<div class="pull-right">
-    <a class="btn btn-link" href="/book/list">一覧画面へ</a>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
