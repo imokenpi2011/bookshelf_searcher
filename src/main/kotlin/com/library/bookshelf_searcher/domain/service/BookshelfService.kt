@@ -74,7 +74,16 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
      * @args book 書籍情報
      * @return bookRes レスポンスクラス
      */
-    fun update(book: Book) = bookshelfRepository.update(book)
+    fun update(book: Book): Int {
+        val bookshelf = book.let {
+            BookshelfRepository.ToBookshelf(
+                uuid = it.uuid,
+                bookName = it.bookName,
+                authorName = it.authorName
+            )
+        }
+        return bookshelfRepository.update(bookshelf)
+    }
 
     /**
      * 書籍情報を削除する.
