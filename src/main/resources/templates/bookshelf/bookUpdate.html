@@ -7,9 +7,11 @@
     <div th:replace="common/common :: title(name='書籍更新')"></div>
     <form th:action="@{/book/update}" th:method="post" th:object="${book}">
         <div class="form-group">
+            <span>書籍名</span>
             <input class="form-control" type="text" th:field="*{bookName}"/>
         </div>
         <div class="form-group">
+            <span>著者名</span>
             <input class="form-control" type="text" th:field="*{authorName}"/>
         </div>
         <input type="hidden" th:field="*{uuid}">
