@@ -6,6 +6,7 @@ import com.library.bookshelf_searcher.domain.service.BookshelfService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
@@ -50,7 +51,7 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
 
     /** 書籍登録処理. */
     @PostMapping("/book/new")
-    fun postBookNew(@ModelAttribute formBook: FormBook, bindingResult: BindingResult, model: Model): String {
+    fun postBookNew(@ModelAttribute @Validated formBook: FormBook, bindingResult: BindingResult, model: Model): String {
         if (bindingResult.hasErrors()) {
             println(bindingResult.allErrors.map { it.defaultMessage }.joinToString(separator = "\n"))
             model.addAttribute("formBook", formBook)
@@ -63,23 +64,22 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
     /** 書籍更新画面. */
     @GetMapping("/book/update/{uuid}")
     fun getBookUpdate(@PathVariable uuid: String, model: Model): String {
-        val book: Book = bookshelfService.findByUuid(uuid)
+        val book: Book? = bookshelfService.findByUuid(uuid)
         model.addAttribute("book", book)
         return "bookshelf/bookUpdate"
     }
 
     /** 書籍更新処理. */
     @PostMapping("/book/update")
-    fun postBookUpdate(@ModelAttribute book: Book, model: Model): String {
-        bookshelfService.update(book)
-        return "redirect:/book/list"
+    fun postBookUpdate(@ModelAttribute @Validated book: Book, bindingResult: BindingResult, model: Model): String {
+        return getBookList(model)
     }
 
     /** 書籍削除処理 */
     @PostMapping("/book/delete/{uuid}")
     fun postBookDelete(@PathVariable uuid: String, model: Model): String {
         bookshelfService.delete(uuid)
-        return "redirect:/book/list"
+        return getBookList(model)
     }
 
 }
