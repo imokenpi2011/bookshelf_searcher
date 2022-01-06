@@ -35,7 +35,7 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
      * @args uuid UUID
      * @return book 書籍情報
      */
-    fun findByUuid(uuid: String): Book {
+    fun findByUuid(uuid: String): Book? {
         val book = bookshelfRepository.findByUuid(uuid)
         return book?.let {
             Book(
