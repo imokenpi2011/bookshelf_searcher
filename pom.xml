@@ -141,6 +141,11 @@
                         <password>${jdbc.password}</password>
                     </jdbc>
                     <generator>
+                        <name>org.jooq.codegen.KotlinGenerator</name>
+                        <generate>
+                            <daos>true</daos>
+                            <pojos>true</pojos>
+                        </generate>
                         <database>
                             <name>org.jooq.meta.mysql.MySQLDatabase</name>
                             <inputSchema>${db.schema}</inputSchema>
