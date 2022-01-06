@@ -3,20 +3,26 @@
 <head th:replace="common/common :: meta_header"></head>
 <body>
 <div th:replace="common/common :: header"></div>
-<div th:replace="common/common :: title(name='書籍登録')"></div>
-<form th:action="@{/book/new}" th:method="post" th:object="${formBook}">
-    <div class="form-group">
-        <span>書籍名</span>
-        <input class="form-control" type="text" th:field="*{bookName}"/>
-    </div>
-    <div class="form-group">
-        <span>著者名</span>
-        <input class="form-control" type="text" th:field="*{authorName}"/>
-    </div>
-    <div class="d-flex align-items-center flex-row row">
-        <button class="p-6 m-3 col-5 btn btn-secondary" type="submit">更新</button>
-        <a class="p-6 m-3 col-5 btn btn-secondary" th:href="@{'/book/list'}">一覧へ</a>
-    </div>
-</form>
+<div class="container p-5">
+    <div th:replace="common/common :: title(name='書籍登録')"></div>
+    <form th:action="@{/book/new}" th:method="post" th:object="${formBook}">
+        <div class="form-group">
+            <span>書籍名</span>
+            <input class="form-control" type="text" th:field="*{bookName}"/>
+        </div>
+        <div class="form-group">
+            <span>著者名</span>
+            <input class="form-control" type="text" th:field="*{authorName}"/>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <button class="p-6 w-100 btn btn-secondary" type="submit">登録</button>
+            </div>
+            <div class="col-6">
+                <a class="p-6 w-100 btn btn-secondary" th:href="@{'/book/list'}">一覧へ</a>
+            </div>
+        </div>
+    </form>
+</div>
 </body>
 </html>

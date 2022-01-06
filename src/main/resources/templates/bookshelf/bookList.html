@@ -3,18 +3,24 @@
 <head th:replace="common/common :: meta_header"></head>
 <body>
 <div th:replace="common/common :: header"></div>
-<div th:replace="common/common :: title(name='書籍一覧')"></div>
-<th:block th:each="book : ${books}">
-    <div class="m-3 card border-secondary">
-        <div class="card-body">
-            <h3 class="card-title" th:text="${book.bookName}"></h3>
-            <p class="card-text" th:text="${book.authorName}"></p>
-            <div class="d-flex align-items-center row">
-                <a class="p-6 m-3 col-5 btn btn-secondary" th:href="@{'/book/update/' + ${book.uuid}}">編集</a>
-                <a class="p-6 m-3 col-5 btn btn-secondary" th:href="@{'/book/delete/' + ${book.uuid}}">削除</a>
+<div class="container p-5">
+    <div th:replace="common/common :: title(name='書籍一覧')"></div>
+    <th:block th:each="book : ${books}">
+        <div class="card border-secondary">
+            <div class="card-body">
+                <h3 class="card-title" th:text="${book.bookName}"></h3>
+                <p class="card-text" th:text="${book.authorName}"></p>
+                <div class="row">
+                    <div class="col-6">
+                        <a class="p-6 w-100 btn btn-secondary" th:href="@{'/book/update/' + ${book.uuid}}">編集</a>
+                    </div>
+                    <form class="col-6" th:action="@{'/book/delete/' + ${book.uuid}}" th:method="post">
+                        <button class="p-6 w-100 btn btn-secondary" type="submit">削除</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</th:block>
+    </th:block>
+</div>
 </body>
 </html>

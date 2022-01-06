@@ -3,23 +3,27 @@
 <head th:replace="common/common :: meta_header"></head>
 <body>
 <div th:replace="common/common :: header"></div>
-<div th:replace="common/common :: title(name='書籍検索')"></div>
-<form th:action="@{/book/search}" th:method="post" th:object="${formBook}">
-    <div class="form-group">
-        <input class="form-control" type="text" th:field="*{authorName}"/>
-    </div>
-    <button class="btn btn-primary" type="submit">検索</button>
-</form>
-<div th:if="${books != null}">
-    <p>検索結果：<span th:text="${#arrays.length(books)}"></span>件</p>
-    <th:block th:each="book : ${books}">
-        <div class="m-3 card border-secondary">
-            <div class="card-body">
-                <h3 class="card-title" th:text="${book.bookName}"></h3>
-                <p class="card-text" th:text="${book.authorName}"></p>
+<div class="container p-5">
+    <div th:replace="common/common :: title(name='書籍検索')"></div>
+    <form th:action="@{/book/search}" th:method="post" th:object="${formBook}">
+        <div class="px-5 my-5 row">
+            <div class="col-10 input-group">
+                <input class="form-control" type="text" th:field="*{authorName}"/>
             </div>
+            <button class="col-2 btn btn-primary" type="submit">検索</button>
         </div>
-    </th:block>
+    </form>
+    <div th:if="${books != null}">
+        <h4>検索結果：<span th:text="${#arrays.length(books)}"></span>件</h4>
+        <th:block th:each="book : ${books}">
+            <div class="m-3 card border-secondary">
+                <div class="card-body">
+                    <h3 class="card-title" th:text="${book.bookName}"></h3>
+                    <p class="card-text" th:text="${book.authorName}"></p>
+                </div>
+            </div>
+        </th:block>
+    </div>
 </div>
 </body>
 </html>
