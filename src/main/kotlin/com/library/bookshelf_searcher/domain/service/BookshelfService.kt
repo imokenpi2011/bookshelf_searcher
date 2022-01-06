@@ -3,6 +3,7 @@ package com.library.bookshelf_searcher.domain.service
 import com.library.bookshelf_searcher.domain.model.Book
 import com.library.bookshelf_searcher.domain.model.FormBook
 import com.library.bookshelf_searcher.domain.repository.BookshelfRepository
+import com.library.bookshelf_searcher.domain.repository.db.tables.pojos.Bookshelf
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -21,9 +22,9 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
         val bookList = bookshelfRepository.findAll()
         return bookList.map {
             Book(
-                uuid = it.uuid,
-                bookName = it.bookName,
-                authorName = it.authorName
+                uuid = it.uuid!!,
+                bookName = it.bookName!!,
+                authorName = it.authorName!!
             )
         }
     }
@@ -36,11 +37,11 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
      */
     fun findByUuid(uuid: String): Book {
         val book = bookshelfRepository.findByUuid(uuid)
-        return book.let {
+        return book?.let {
             Book(
-                uuid = it.uuid,
-                bookName = it.bookName,
-                authorName = it.authorName
+                uuid = it.uuid!!,
+                bookName = it.bookName!!,
+                authorName = it.authorName!!
             )
         }
     }
@@ -55,9 +56,9 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
         val bookList = bookshelfRepository.findByAuthor(authorName)
         return bookList.map {
             Book(
-                uuid = it.uuid,
-                bookName = it.bookName,
-                authorName = it.authorName
+                uuid = it.uuid!!,
+                bookName = it.bookName!!,
+                authorName = it.authorName!!
             )
         }
     }
@@ -70,10 +71,10 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
      */
     fun save(formBook: FormBook): Int {
         val bookshelf = formBook.let {
-            BookshelfRepository.ToBookshelf(
+            Bookshelf(
                 uuid = UUID.randomUUID().toString(),
-                bookName = it.bookName.toString(),
-                authorName = it.authorName.toString()
+                bookName = it.bookName,
+                authorName = it.authorName
             )
         }
         return bookshelfRepository.save(bookshelf)
@@ -87,7 +88,7 @@ class BookshelfService(private val bookshelfRepository: BookshelfRepository) {
      */
     fun update(book: Book): Int {
         val bookshelf = book.let {
-            BookshelfRepository.ToBookshelf(
+            Bookshelf(
                 uuid = it.uuid,
                 bookName = it.bookName,
                 authorName = it.authorName
