@@ -6,7 +6,7 @@
 <div class="container p-5">
     <div th:replace="common/common :: title(name='書籍一覧')"></div>
     <th:block th:each="book : ${books}">
-        <div class="card border-secondary">
+        <div class="m-3 card border-secondary">
             <div class="card-body">
                 <h3 class="card-title" th:text="${book.bookName}"></h3>
                 <p class="card-text" th:text="${book.authorName}"></p>
