@@ -70,8 +70,8 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
     }
 
     /** 書籍削除処理 */
-    @GetMapping("/book/delete/{uuid}")
-    fun getBookDelete(@PathVariable uuid: String, model: Model): String {
+    @PostMapping("/book/delete/{uuid}")
+    fun postBookDelete(@PathVariable uuid: String, model: Model): String {
         bookshelfService.delete(uuid)
         return "redirect:/book/list"
     }
