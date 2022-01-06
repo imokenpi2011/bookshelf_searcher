@@ -5,6 +5,7 @@ import com.library.bookshelf_searcher.domain.model.FormBook
 import com.library.bookshelf_searcher.domain.service.BookshelfService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
@@ -49,7 +50,12 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
 
     /** 書籍登録処理. */
     @PostMapping("/book/new")
-    fun postBookNew(@ModelAttribute formBook: FormBook, model: Model): String {
+    fun postBookNew(@ModelAttribute formBook: FormBook, bindingResult: BindingResult, model: Model): String {
+        if (bindingResult.hasErrors()) {
+            println(bindingResult.allErrors.map { it.defaultMessage }.joinToString(separator = "\n"))
+            model.addAttribute("formBook", formBook)
+            return "bookshelf/bookNew"
+        }
         bookshelfService.save(formBook)
         return "redirect:/book/list"
     }

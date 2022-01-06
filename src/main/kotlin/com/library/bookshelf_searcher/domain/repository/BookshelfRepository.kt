@@ -1,9 +1,10 @@
 package com.library.bookshelf_searcher.domain.repository
 
-import com.library.bookshelf_searcher.domain.repository.db.Tables.BOOKSHELF
+import com.library.bookshelf_searcher.domain.repository.db.tables.daos.BookshelfDao
+import com.library.bookshelf_searcher.domain.repository.db.tables.references.BOOKSHELF
+import org.jooq.Configuration
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 /** 作成者名. */
@@ -22,8 +23,10 @@ const val DELETED = 1
  * Bookshelfリポジトリクラス.
  */
 @Repository
-@Transactional
-class BookshelfRepository(private val dsl: DSLContext) {
+class BookshelfRepository(private val dsl: DSLContext, configuration: Configuration) {
+
+    /** Daoの生成. */
+    val bookshelfDao: BookshelfDao = BookshelfDao(configuration)
 
     /**
      * 全件取得する.
