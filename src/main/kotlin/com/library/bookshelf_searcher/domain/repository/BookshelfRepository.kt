@@ -34,9 +34,7 @@ class BookshelfRepository(private val dsl: DSLContext, configuration: Configurat
      *
      * ＠return List<ToBookshelf> 書籍情報の配列
      * */
-    fun findAll(): List<Bookshelf> = dsl.selectFrom(BOOKSHELF)
-        .where(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
-        .fetchInto(Bookshelf::class.java)
+    fun findAll(): List<Bookshelf> = bookshelfDao.fetchByDeleteStatus(NOT_DELETED)
 
     /**
      * IDに応じた書籍を取得する.
@@ -44,12 +42,7 @@ class BookshelfRepository(private val dsl: DSLContext, configuration: Configurat
      * @args uuid UUID
      * @return ToBookshelf 書籍情報
      */
-    fun findByUuid(uuid: String): Bookshelf = dsl.selectFrom(BOOKSHELF)
-        .where(BOOKSHELF.UUID.eq(uuid))
-        .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
-        .limit(1)
-        .fetchInto(Bookshelf::class.java)
-        .first()
+    fun findByUuid(uuid: String): Bookshelf? = bookshelfDao.fetchByUuid(uuid).firstOrNull()
 
     /**
      * 著者名に応じた書籍を取得する.
@@ -57,10 +50,7 @@ class BookshelfRepository(private val dsl: DSLContext, configuration: Configurat
      * @args authorName 著者名
      * @return List<ToBookshelf> 書籍情報の配列
      */
-    fun findByAuthor(authorName: String): List<Bookshelf> = dsl.selectFrom(BOOKSHELF)
-        .where(BOOKSHELF.AUTHOR_NAME.eq(authorName))
-        .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
-        .fetchInto(Bookshelf::class.java)
+    fun findByAuthor(authorName: String): List<Bookshelf> = bookshelfDao.fetchByAuthorName(authorName)
 
     /**
      * 書籍情報を新規作成する.
@@ -92,7 +82,6 @@ class BookshelfRepository(private val dsl: DSLContext, configuration: Configurat
         .set(BOOKSHELF.UPDATED_AT, LocalDateTime.now())
         .where(BOOKSHELF.UUID.eq(book.uuid))
         .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
-        .limit(1)
         .execute()
 
     /**
@@ -104,6 +93,5 @@ class BookshelfRepository(private val dsl: DSLContext, configuration: Configurat
     fun deleteByUuid(uuid: String): Int = dsl.update(BOOKSHELF)
         .set(BOOKSHELF.DELETE_STATUS, DELETED)
         .where(BOOKSHELF.UUID.eq(uuid))
-        .limit(1)
         .execute()
 }
