@@ -5,6 +5,9 @@
 <div th:replace="common/common :: header"></div>
 <div class="container p-5">
     <div th:replace="common/common :: title(name='書籍登録')"></div>
+    <div th:if="${message != null}" th:object="${message}">
+        <div th:replace="common/common :: messageArea(type=message.type,content=message.message)"></div>
+    </div>
     <form th:action="@{/book/new}" th:method="post" th:object="${formBook}">
         <div class="form-group">
             <span>書籍名</span>
