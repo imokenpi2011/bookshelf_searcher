@@ -50,7 +50,10 @@ class BookshelfRepository(private val dsl: DSLContext, configuration: Configurat
      * @args authorName 著者名
      * @return List<ToBookshelf> 書籍情報の配列
      */
-    fun findByAuthor(authorName: String): List<Bookshelf> = bookshelfDao.fetchByAuthorName(authorName)
+    fun findByAuthor(authorName: String): List<Bookshelf> = dsl.selectFrom(BOOKSHELF)
+        .where(BOOKSHELF.AUTHOR_NAME.eq(authorName))
+        .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
+        .fetchInto(Bookshelf::class.java)
 
     /**
      * 書籍情報を新規作成する.
