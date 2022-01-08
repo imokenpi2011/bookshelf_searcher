@@ -8,10 +8,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.*
 
 /**
  * Bookshelfコントローラクラス.
@@ -21,22 +18,18 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
 
     /** 検索画面. */
     @GetMapping("/book/search")
-    fun getSearchPage(@ModelAttribute formBook: FormBook, model: Model): String {
+    fun getSearchPage(
+        @RequestParam(required = false) authorName: String?, @ModelAttribute formBook: FormBook, model: Model
+    ): String {
+        // パラメータ指定時のみ検索処理実行
+        if (authorName != null) {
+            // 検索処理を実行
+            val books: List<Book> = bookshelfService.findByAuthor(authorName)
+            model.addAttribute("books", books)
+        }
+
         // 検索画面に遷移
         model.addAttribute("formBook", formBook)
-        return "bookshelf/index"
-    }
-
-    /** 検索処理. */
-    @PostMapping("/book/search")
-    fun postSearchPage(@ModelAttribute formBook: FormBook, model: Model): String {
-        val authorName: String = formBook.authorName.toString()
-
-        // 検索処理を実行
-        val books: List<Book> = bookshelfService.findByAuthor(authorName)
-        model.addAttribute("books", books)
-
-        // 検索画面に遷移
         return "bookshelf/index"
     }
 
