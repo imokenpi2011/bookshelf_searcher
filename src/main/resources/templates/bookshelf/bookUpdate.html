@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>本検索アプリ</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
+<head th:replace="common/common :: meta_header"></head>
 <body>
-<h1>書籍更新</h1>
-<form th:action="@{/book/update}" th:method="post" th:object="${book}">
-    <div class="form-group">
-        <input class="form-control" type="text" th:field="*{bookName}"/>
+<div th:replace="common/common :: header"></div>
+<div class="container p-5">
+    <div th:replace="common/common :: title(name='書籍更新')"></div>
+    <div th:if="${message != null}" th:object="${message}">
+        <div th:replace="common/common :: messageArea(type=message.type,content=message.message)"></div>
     </div>
-    <div class="form-group">
-        <input class="form-control" type="text" th:field="*{authorName}"/>
-    </div>
-    <input type="hidden" th:field="*{uuid}">
-    <button class="btn btn-default" type="submit">更新</button>
-</form>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+    <form th:action="@{/book/update}" th:method="post" th:object="${book}">
+        <div class="form-group">
+            <span>書籍名</span>
+            <input class="form-control" type="text" data-maxlength="255" th:field="*{bookName}"/>
+        </div>
+        <div class="form-group">
+            <span>著者名</span>
+            <input class="form-control" type="text" data-maxlength="60" th:field="*{authorName}"/>
+        </div>
+        <input type="hidden" th:field="*{uuid}">
+        <div class="row">
+            <div class="col-6">
+                <button class="p-6 w-100 btn btn-secondary" type="submit">更新</button>
+            </div>
+            <div class="col-6">
+                <a class="p-6 w-100 btn btn-secondary" th:href="@{'/book/list'}">一覧へ</a>
+            </div>
+        </div>
+    </form>
+</div>
 </body>
 </html>

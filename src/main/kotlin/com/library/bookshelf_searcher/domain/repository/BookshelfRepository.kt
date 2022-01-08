@@ -1,9 +1,11 @@
 package com.library.bookshelf_searcher.domain.repository
 
-import com.library.bookshelf_searcher.domain.repository.db.Tables.BOOKSHELF
+import com.library.bookshelf_searcher.domain.repository.db.tables.daos.BookshelfDao
+import com.library.bookshelf_searcher.domain.repository.db.tables.pojos.Bookshelf
+import com.library.bookshelf_searcher.domain.repository.db.tables.references.BOOKSHELF
+import org.jooq.Configuration
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 /** 作成者名. */
@@ -22,17 +24,17 @@ const val DELETED = 1
  * Bookshelfリポジトリクラス.
  */
 @Repository
-@Transactional
-class BookshelfRepository(private val dsl: DSLContext) {
+class BookshelfRepository(private val dsl: DSLContext, configuration: Configuration) {
+
+    /** Daoの生成. */
+    val bookshelfDao: BookshelfDao = BookshelfDao(configuration)
 
     /**
      * 全件取得する.
      *
      * ＠return List<ToBookshelf> 書籍情報の配列
      * */
-    fun findAll(): List<ToBookshelf> = dsl.selectFrom(BOOKSHELF)
-        .where(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
-        .fetchInto(ToBookshelf::class.java)
+    fun findAll(): List<Bookshelf> = bookshelfDao.fetchByDeleteStatus(NOT_DELETED)
 
     /**
      * IDに応じた書籍を取得する.
@@ -40,12 +42,7 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * @args uuid UUID
      * @return ToBookshelf 書籍情報
      */
-    fun findByUuid(uuid: String): ToBookshelf = dsl.selectFrom(BOOKSHELF)
-        .where(BOOKSHELF.UUID.eq(uuid))
-        .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
-        .limit(1)
-        .fetchInto(ToBookshelf::class.java)
-        .first()
+    fun findByUuid(uuid: String): Bookshelf? = bookshelfDao.fetchByUuid(uuid).firstOrNull()
 
     /**
      * 著者名に応じた書籍を取得する.
@@ -53,10 +50,10 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * @args authorName 著者名
      * @return List<ToBookshelf> 書籍情報の配列
      */
-    fun findByAuthor(authorName: String): List<ToBookshelf> = dsl.selectFrom(BOOKSHELF)
+    fun findByAuthor(authorName: String): List<Bookshelf> = dsl.selectFrom(BOOKSHELF)
         .where(BOOKSHELF.AUTHOR_NAME.eq(authorName))
         .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
-        .fetchInto(ToBookshelf::class.java)
+        .fetchInto(Bookshelf::class.java)
 
     /**
      * 書籍情報を新規作成する.
@@ -64,7 +61,7 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * @args book 書籍情報
      * @return Int 登録件数
      */
-    fun save(book: ToBookshelf): Int = dsl.insertInto(BOOKSHELF)
+    fun save(book: Bookshelf): Int = dsl.insertInto(BOOKSHELF)
         .set(BOOKSHELF.UUID, book.uuid)
         .set(BOOKSHELF.BOOK_NAME, book.bookName)
         .set(BOOKSHELF.AUTHOR_NAME, book.authorName)
@@ -81,14 +78,13 @@ class BookshelfRepository(private val dsl: DSLContext) {
      * @args book 書籍情報
      * @return Int 更新件数
      */
-    fun update(book: ToBookshelf): Int = dsl.update(BOOKSHELF)
+    fun update(book: Bookshelf): Int = dsl.update(BOOKSHELF)
         .set(BOOKSHELF.BOOK_NAME, book.bookName)
         .set(BOOKSHELF.AUTHOR_NAME, book.authorName)
         .set(BOOKSHELF.UPDATED_BY, UPDATE_USER)
         .set(BOOKSHELF.UPDATED_AT, LocalDateTime.now())
         .where(BOOKSHELF.UUID.eq(book.uuid))
         .and(BOOKSHELF.DELETE_STATUS.eq(NOT_DELETED))
-        .limit(1)
         .execute()
 
     /**
@@ -100,15 +96,5 @@ class BookshelfRepository(private val dsl: DSLContext) {
     fun deleteByUuid(uuid: String): Int = dsl.update(BOOKSHELF)
         .set(BOOKSHELF.DELETE_STATUS, DELETED)
         .where(BOOKSHELF.UUID.eq(uuid))
-        .limit(1)
         .execute()
-
-    /**
-     * ToBookshelfクラス.
-     * */
-    data class ToBookshelf(
-        val uuid: String,  // UUID
-        val bookName: String,  // タイトル
-        val authorName: String  // 著者名
-    )
 }
