@@ -84,17 +84,17 @@ internal class BookshelfControllerTest {
 
     /** 試験用インスタンス */
     // 試験用のBookインスタンス
-    private val TEST_BOOK = Book(
+    private val testBook = Book(
         uuid = BookshelfControllerTest.VALID_UUID,
         bookName = BookshelfControllerTest.VALID_BOOK,
         authorName = BookshelfControllerTest.VALID_AUTHOR
     )
 
     // 試験用のBookの配列
-    private val TEST_BOOK_LIST = listOf(TEST_BOOK, TEST_BOOK)
+    private val testBookList = listOf(testBook, testBook)
 
     // 試験用のformBookインスタンス
-    private val TEST_FORM_BOOK = FormBook(
+    private val testFormBook = FormBook(
         bookName = BookshelfControllerTest.VALID_BOOK,
         authorName = BookshelfControllerTest.VALID_AUTHOR
     )
@@ -115,12 +115,12 @@ internal class BookshelfControllerTest {
     fun getSearch_検索あり() {
         // 戻り値の定義
         given(bookshelfService.findByAuthor(BookshelfControllerTest.VALID_AUTHOR))
-            .willReturn(TEST_BOOK_LIST)
+            .willReturn(testBookList)
 
         // 検索処理あり
         mockMvc.perform(get("/book/search?authorName=" + BookshelfControllerTest.VALID_AUTHOR))
             .andExpect(status().isOk)
-            .andExpect(model().attribute("books", TEST_BOOK_LIST))
+            .andExpect(model().attribute("books", testBookList))
             .andExpect(view().name(BookshelfControllerTest.PAGE_SEARCH))
     }
 
@@ -132,12 +132,12 @@ internal class BookshelfControllerTest {
     fun getBookList_画面表示() {
         // 戻り値の定義
         given(bookshelfService.findAll())
-            .willReturn(TEST_BOOK_LIST)
+            .willReturn(testBookList)
 
         // 一覧表示のテスト
         mockMvc.perform(get("/book/list"))
             .andExpect(status().isOk)
-            .andExpect(model().attribute("books", TEST_BOOK_LIST))
+            .andExpect(model().attribute("books", testBookList))
             .andExpect(view().name(BookshelfControllerTest.PAGE_LIST))
     }
 
@@ -161,7 +161,7 @@ internal class BookshelfControllerTest {
     @Test
     fun postBookNew_正常系() {
         // 戻り値の定義(登録成功)
-        given(bookshelfService.save(TEST_FORM_BOOK))
+        given(bookshelfService.save(testFormBook))
             .willReturn(1)
 
         // 登録画面表示のテスト
@@ -182,7 +182,7 @@ internal class BookshelfControllerTest {
     @Test
     fun postBookNew_異常系_登録失敗() {
         // 戻り値の定義(登録失敗)
-        given(bookshelfService.save(TEST_FORM_BOOK))
+        given(bookshelfService.save(testFormBook))
             .willReturn(0)
 
         // 件数0の時のテスト
@@ -197,7 +197,7 @@ internal class BookshelfControllerTest {
                     Message(type = "error", message = BookshelfControllerTest.SAVE_FAILED_MESSAGE)
                 )
             )
-            .andExpect(model().attribute("formBook", TEST_FORM_BOOK))
+            .andExpect(model().attribute("formBook", testFormBook))
             .andExpect(view().name(BookshelfControllerTest.PAGE_NEW))
     }
 
@@ -329,12 +329,12 @@ internal class BookshelfControllerTest {
     fun getBookUpdate_正常系() {
         // 戻り値の定義(登録成功)
         given(bookshelfService.findByUuid(BookshelfControllerTest.VALID_UUID))
-            .willReturn(TEST_BOOK)
+            .willReturn(testBook)
 
         // 件数0の時のテスト
         mockMvc.perform(get("/book/update/" + BookshelfControllerTest.VALID_UUID))
             .andExpect(status().isOk)
-            .andExpect(model().attribute("book", TEST_BOOK))
+            .andExpect(model().attribute("book", testBook))
             .andExpect(view().name(BookshelfControllerTest.PAGE_UPDATE))
     }
 
@@ -359,7 +359,7 @@ internal class BookshelfControllerTest {
     @Test
     fun postBookUpdate_正常系() {
         // 戻り値の定義(登録成功)
-        given(bookshelfService.update(TEST_BOOK))
+        given(bookshelfService.update(testBook))
             .willReturn(1)
 
         // 更新成功時のテスト
@@ -381,7 +381,7 @@ internal class BookshelfControllerTest {
     @Test
     fun postBookUpdate_異常系_登録失敗() {
         // 戻り値の定義(登録失敗)
-        given(bookshelfService.update(TEST_BOOK))
+        given(bookshelfService.update(testBook))
             .willReturn(0)
 
         // 更新失敗時のテスト
