@@ -5,10 +5,11 @@
 <div th:replace="common/common :: header"></div>
 <div class="container p-5">
     <div th:replace="common/common :: title(name='書籍検索')"></div>
-    <form th:action="@{/book/search}" th:method="post" th:object="${formBook}">
+    <form th:action="@{/book/search}" th:method="get" th:object="${formBook}">
         <div class="px-5 my-5 row">
             <div class="col-10 input-group">
-                <input class="form-control" type="text" data-maxlength="60" th:field="*{authorName}"/>
+                <input class="form-control" type="text" th:name="authorName" data-maxlength="60"
+                       th:field="*{authorName}"/>
             </div>
             <button class="col-2 btn btn-primary" type="submit">検索</button>
         </div>

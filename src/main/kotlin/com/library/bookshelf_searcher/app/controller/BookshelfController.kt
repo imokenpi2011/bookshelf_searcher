@@ -8,10 +8,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.*
 
 /**
  * Bookshelfコントローラクラス.
@@ -21,22 +18,18 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
 
     /** 検索画面. */
     @GetMapping("/book/search")
-    fun getSearchPage(@ModelAttribute formBook: FormBook, model: Model): String {
+    fun getSearchPage(
+        @RequestParam(required = false) authorName: String?, @ModelAttribute formBook: FormBook, model: Model
+    ): String {
+        // パラメータ指定時のみ検索処理実行
+        if (authorName != null) {
+            // 検索処理を実行
+            val books: List<Book> = bookshelfService.findByAuthor(authorName)
+            model.addAttribute("books", books)
+        }
+
         // 検索画面に遷移
         model.addAttribute("formBook", formBook)
-        return "bookshelf/index"
-    }
-
-    /** 検索処理. */
-    @PostMapping("/book/search")
-    fun postSearchPage(@ModelAttribute formBook: FormBook, model: Model): String {
-        val authorName: String = formBook.authorName.toString()
-
-        // 検索処理を実行
-        val books: List<Book> = bookshelfService.findByAuthor(authorName)
-        model.addAttribute("books", books)
-
-        // 検索画面に遷移
         return "bookshelf/index"
     }
 
@@ -64,8 +57,6 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
     fun postBookNew(@ModelAttribute @Validated formBook: FormBook, bindingResult: BindingResult, model: Model): String {
         // バリデーションエラーを確認
         if (bindingResult.hasErrors()) {
-            var errorMsg = bindingResult.allErrors.map { it.defaultMessage }.joinToString(separator = "\n")
-            model.addAttribute("message", Message(type = "error", message = errorMsg))
             model.addAttribute("formBook", formBook)
             return "bookshelf/bookNew"
         }
@@ -73,9 +64,13 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         // 登録処理
         if (bookshelfService.save(formBook) == 0) {
             // 登録件数が0だった場合は登録画面に遷移
+            model.addAttribute("message", Message(type = "error", message = "書籍情報の登録に失敗しました。"))
             model.addAttribute("formBook", formBook)
             return "bookshelf/bookNew"
         }
+
+        // 一覧画面に遷移
+        model.addAttribute("message", Message(type = "info", message = "書籍情報を登録しました。"))
         return getBookList(model)
     }
 
@@ -104,8 +99,6 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
     fun postBookUpdate(@ModelAttribute @Validated book: Book, bindingResult: BindingResult, model: Model): String {
         // バリデーションエラーを確認
         if (bindingResult.hasErrors()) {
-            var errorMsg = bindingResult.allErrors.map { it.defaultMessage }.joinToString(separator = "\n")
-            model.addAttribute("message", Message(type = "error", message = errorMsg))
             model.addAttribute("book", book)
             return "bookshelf/bookUpdate"
         }
@@ -129,7 +122,7 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         // 削除処理
         if (bookshelfService.delete(uuid) == 0) {
             // 削除に失敗した場合
-            model.addAttribute("message", Message(type = "error", message = "書籍情報の更新に失敗しました。"))
+            model.addAttribute("message", Message(type = "error", message = "書籍情報の削除に失敗しました。"))
         } else {
             // 削除に成功した場合
             model.addAttribute("message", Message(type = "info", message = "書籍情報を削除しました。"))
