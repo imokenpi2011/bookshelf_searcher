@@ -66,6 +66,7 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         // 登録処理
         if (bookshelfService.save(formBook) == 0) {
             // 登録件数が0だった場合は登録画面に遷移
+            model.addAttribute("message", Message(type = "error", message = "書籍情報の登録に失敗しました。"))
             model.addAttribute("formBook", formBook)
             return "bookshelf/bookNew"
         }
