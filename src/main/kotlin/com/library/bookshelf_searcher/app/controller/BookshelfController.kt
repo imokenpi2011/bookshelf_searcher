@@ -70,6 +70,9 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
             model.addAttribute("formBook", formBook)
             return "bookshelf/bookNew"
         }
+
+        // 一覧画面に遷移
+        model.addAttribute("message", Message(type = "info", message = "書籍情報を登録しました。"))
         return getBookList(model)
     }
 
@@ -123,7 +126,7 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
         // 削除処理
         if (bookshelfService.delete(uuid) == 0) {
             // 削除に失敗した場合
-            model.addAttribute("message", Message(type = "error", message = "書籍情報の更新に失敗しました。"))
+            model.addAttribute("message", Message(type = "error", message = "書籍情報の削除に失敗しました。"))
         } else {
             // 削除に成功した場合
             model.addAttribute("message", Message(type = "info", message = "書籍情報を削除しました。"))
