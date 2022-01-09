@@ -79,23 +79,6 @@ internal class BookshelfControllerTest {
 
             // 61文字
             const val OVER60 = "1111111111222222222211111111112222222222111111111122222222221"
-
-            /** 試験用インスタンス */
-            // 試験用のBookインスタンス
-            private val TEST_BOOK = Book(
-                uuid = BookshelfControllerTest.VALID_UUID,
-                bookName = BookshelfControllerTest.VALID_BOOK,
-                authorName = BookshelfControllerTest.VALID_AUTHOR
-            )
-
-            // 試験用のBookの配列
-            private val TEST_BOOK_LIST = listOf(TEST_BOOK, TEST_BOOK)
-
-            // 試験用のformBookインスタンス
-            private val TEST_FORM_BOOK = FormBook(
-                bookName = BookshelfControllerTest.VALID_BOOK,
-                authorName = BookshelfControllerTest.VALID_AUTHOR
-            )
         }
     }
 
