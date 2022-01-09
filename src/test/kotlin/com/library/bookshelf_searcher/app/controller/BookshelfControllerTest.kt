@@ -106,7 +106,7 @@ internal class BookshelfControllerTest {
     @Test
     fun getSearch_画面表示() {
         // 画面表示のみ
-        mockMvc.perform(get("/book/search"))
+        mockMvc.perform(get("/book"))
             .andExpect(status().isOk)
             .andExpect(view().name(BookshelfControllerTest.PAGE_SEARCH))
     }
@@ -118,7 +118,7 @@ internal class BookshelfControllerTest {
             .willReturn(testBookList)
 
         // 検索処理あり
-        mockMvc.perform(get("/book/search?authorName=" + BookshelfControllerTest.VALID_AUTHOR))
+        mockMvc.perform(get("/book?authorName=" + BookshelfControllerTest.VALID_AUTHOR))
             .andExpect(status().isOk)
             .andExpect(model().attribute("books", testBookList))
             .andExpect(view().name(BookshelfControllerTest.PAGE_SEARCH))

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*
 class BookshelfController(private val bookshelfService: BookshelfService) {
 
     /** 検索画面. */
-    @GetMapping("/book/search")
+    @GetMapping("/book")
     fun getSearchPage(
         @RequestParam(required = false) authorName: String?, @ModelAttribute formBook: FormBook, model: Model
     ): String {
@@ -38,7 +38,7 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
     fun getBookList(model: Model): String {
         // 書籍一覧を取得
         val books: List<Book> = bookshelfService.findAll()
-        
+
         // 一覧画面に遷移
         model.addAttribute("books", books)
         return "bookshelf/bookList"
