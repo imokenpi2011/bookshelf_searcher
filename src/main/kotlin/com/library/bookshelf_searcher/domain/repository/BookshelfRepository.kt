@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
 /** 作成者名. */
-const val CREATE_USER = "admin"
+const val CREATE_USER = "create_user"
 
 /** 更新者名. */
-const val UPDATE_USER = "admin"
+const val UPDATE_USER = "update_user"
 
 /** 削除ステータス:未削除. */
 const val NOT_DELETED = 0
@@ -68,7 +68,7 @@ class BookshelfRepository(private val dsl: DSLContext, configuration: Configurat
         .set(BOOKSHELF.CREATED_AT, LocalDateTime.now())
         .set(BOOKSHELF.UPDATED_AT, LocalDateTime.now())
         .set(BOOKSHELF.CREATED_BY, CREATE_USER)
-        .set(BOOKSHELF.UPDATED_BY, UPDATE_USER)
+        .set(BOOKSHELF.UPDATED_BY, CREATE_USER)
         .set(BOOKSHELF.DELETE_STATUS, NOT_DELETED)
         .execute()
 
