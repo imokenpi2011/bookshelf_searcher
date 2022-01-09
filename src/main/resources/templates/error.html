@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common :: meta_header"></head>
+<body>
+<div th:replace="common/common :: header"></div>
+<div class="container my-5 py-5 text-center">
+    <h1>ただいま大変混み合っております</h1>
+    <a class="p-6 w-100 btn btn-secondary" th:href="@{'/book'}">検索画面に戻る</a>
+</div>
+</body>
+</html>
