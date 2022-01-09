@@ -18,5 +18,5 @@ CREATE TABLE IF NOT EXISTS bookshelf (
     created_by   varchar(60) not null,   -- 作成者
     updated_by   varchar(60) not null,   -- 更新者
     delete_status   int(1) default 0,   -- 論理削除
-    PRIMARY KEY (id)
+    PRIMARY KEY (id, uuid)
 );
