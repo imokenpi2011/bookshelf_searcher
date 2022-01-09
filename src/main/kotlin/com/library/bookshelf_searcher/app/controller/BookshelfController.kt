@@ -57,8 +57,6 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
     fun postBookNew(@ModelAttribute @Validated formBook: FormBook, bindingResult: BindingResult, model: Model): String {
         // バリデーションエラーを確認
         if (bindingResult.hasErrors()) {
-            var errorMsg = bindingResult.allErrors.map { it.defaultMessage }.joinToString(separator = "\n")
-            model.addAttribute("message", Message(type = "error", message = errorMsg))
             model.addAttribute("formBook", formBook)
             return "bookshelf/bookNew"
         }
@@ -101,8 +99,6 @@ class BookshelfController(private val bookshelfService: BookshelfService) {
     fun postBookUpdate(@ModelAttribute @Validated book: Book, bindingResult: BindingResult, model: Model): String {
         // バリデーションエラーを確認
         if (bindingResult.hasErrors()) {
-            var errorMsg = bindingResult.allErrors.map { it.defaultMessage }.joinToString(separator = "\n")
-            model.addAttribute("message", Message(type = "error", message = errorMsg))
             model.addAttribute("book", book)
             return "bookshelf/bookUpdate"
         }
