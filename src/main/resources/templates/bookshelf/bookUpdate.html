@@ -11,11 +11,15 @@
     <form th:action="@{/book/update}" th:method="post" th:object="${book}">
         <div class="form-group">
             <span>書籍名</span>
-            <input class="form-control" type="text" data-maxlength="255" th:field="*{bookName}"/>
+            <input class="form-control" type="text" data-maxlength="255" th:field="*{bookName}"
+                   th:classappend="${#fields.hasErrors('*{bookName}') ? 'is-invalid' : ''}"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('*{bookName}')}" th:errors="*{bookName}"></div>
         </div>
         <div class="form-group">
             <span>著者名</span>
-            <input class="form-control" type="text" data-maxlength="60" th:field="*{authorName}"/>
+            <input class="form-control" type="text" data-maxlength="60" th:field="*{authorName}"
+                   th:classappend="${#fields.hasErrors('*{authorName}') ? 'is-invalid' : ''}"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('*{authorName}')}" th:errors="*{authorName}"></div>
         </div>
         <input type="hidden" th:field="*{uuid}">
         <div class="row">
